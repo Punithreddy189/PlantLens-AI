@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitattributes
+.gitignore
+*.md
+test.jpg
+static/uploads/*
