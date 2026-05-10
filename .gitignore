@@ -1,0 +1,22 @@
+# Model weights (too large for GitHub - 200MB+)
+plant_disease_model_1_latest.pt
+*.pt
+*.pth
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Uploaded images (user data)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Virtual environments
+venv/
+env/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

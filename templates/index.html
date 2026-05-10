@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}PlantLens AI - Engine{% endblock pagetitle %}
+
+{% block body %}
+<style>
+    .engine-container {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+        min-height: calc(100vh - 160px);
+        display: flex;
+        align-items: center;
+    }
+
+    .upload-zone {
+        background: var(--bg-glass-light);
+        border: 2px dashed var(--accent);
+        border-radius: 1.5rem;
+        padding: 4rem 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-zone:hover {
+        background: rgba(16, 185, 129, 0.05);
+        box-shadow: 0 0 30px var(--accent-glow) inset;
+    }
+
+    .upload-icon {
+        font-size: 4rem;
+        color: var(--accent);
+        margin-bottom: 1.5rem;
+    }
+
+    .file-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .camera-container {
+        border-radius: 1rem;
+        overflow: hidden;
+        border: 2px solid var(--border-glass);
+        margin-top: 1.5rem;
+        position: relative;
+    }
+
+    #camera-feed {
+        width: 100%;
+        display: block;
+    }
+
+    .preview-container {
+        margin-top: 2rem;
+        border-radius: 1rem;
+        overflow: hidden;
+        border: 2px solid var(--accent);
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+</style>
+
+<div class="engine-container">
+    <div class="container">
+        <div class="row text-center mb-5 gs-reveal-up">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold text-gradient mb-3">Initialize AI Engine</h1>
+                <p class="text-light fs-5">Upload an image of a diseased leaf or use your camera to diagnose the issue instantly.</p>
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <!-- Left Info Panel -->
+            <div class="col-lg-5 mb-5 mb-lg-0 gs-reveal-left">
+                <div class="glass-panel p-4 p-md-5 h-100">
+                    <h3 class="text-gradient mb-4"><i class="fa-solid fa-microscope me-2"></i> How it Works</h3>
+                    <ul class="list-unstyled text-light">
+                        <li class="mb-4">
+                            <h5 class="text-main mb-2"><i class="fa-solid fa-1 text-accent me-2"></i> Capture or Upload</h5>
+                            Ensure the leaf is well-lit and clearly visible in the frame.
+                        </li>
+                        <li class="mb-4">
+                            <h5 class="text-main mb-2"><i class="fa-solid fa-2 text-accent me-2"></i> AI Processing</h5>
+                            Our Convolutional Neural Network analyzes features, textures, and discoloration.
+                        </li>
+                        <li class="mb-0">
+                            <h5 class="text-main mb-2"><i class="fa-solid fa-3 text-accent me-2"></i> Get Results</h5>
+                            Receive instant diagnosis, confidence scores, and treatment recommendations.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Upload Panel -->
+            <div class="col-lg-7 gs-reveal-right">
+                <div class="glass-panel p-4 p-md-5">
+                    <form action="/submit" method="POST" enctype="multipart/form-data" id="upload-form">
+                        
+                        <div class="upload-zone mb-4" id="drop-zone">
+                            <input type="file" class="file-input" id="actual-btn" name="image" accept="image/*">
+                            <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                            <h4 class="mb-2 text-main">Drag & Drop Image Here</h4>
+                            <p class="text-light mb-0">or click to browse from your device</p>
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <span class="text-light px-3">OR</span>
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <button type="button" class="btn-outline-glow w-100" id="camera-btn">
+                                <i class="fa-solid fa-camera me-2"></i> Use Device Camera
+                            </button>
+                        </div>
+
+                        <!-- Status text -->
+                        <div class="text-center mb-4">
+                            <span id="file-chosen" class="badge bg-success bg-opacity-25 text-success border border-success p-2 fs-6 rounded-pill" style="display: none;">
+                                <i class="fa-solid fa-check-circle me-1"></i> Image Selected
+                            </span>
+                        </div>
+
+                        <!-- Camera Container -->
+                        <div id="camera-container" class="camera-container mb-4" style="display: none;">
+                            <video id="camera-feed" autoplay playsinline></video>
+                            <button type="button" id="capture-btn" class="btn btn-danger w-100 rounded-0 py-3 fw-bold" style="border: none;">
+                                <i class="fa-solid fa-camera me-2"></i> Capture Frame
+                            </button>
+                        </div>
+
+                        <!-- Preview Image -->
+                        <div id="preview-container" class="preview-container mb-4" style="display: none;">
+                            <img id="preview" src="#" alt="Preview" class="w-100" />
+                        </div>
+                        
+                        <!-- Hidden file input for camera captured data -->
+                        <input type="file" id="captured-image" style="display:none;" />
+
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn-glow btn-lg w-100" id="submit-btn" disabled>
+                                <i class="fa-solid fa-bolt me-2"></i> Run Analysis
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Entrance Animations
+        gsap.from(".gs-reveal-up", { y: 50, opacity: 0, duration: 1, ease: "power3.out" });
+        gsap.from(".gs-reveal-left", { x: -50, opacity: 0, duration: 1, delay: 0.2, ease: "power3.out" });
+        gsap.from(".gs-reveal-right", { x: 50, opacity: 0, duration: 1, delay: 0.4, ease: "power3.out" });
+
+        // Logic Elements
+        const actualBtn = document.getElementById('actual-btn');
+        const fileChosen = document.getElementById('file-chosen');
+        const submitBtn = document.getElementById('submit-btn');
+        const previewContainer = document.getElementById('preview-container');
+        const previewImg = document.getElementById('preview');
+        const dropZone = document.getElementById('drop-zone');
+
+        // File Upload Handling
+        actualBtn.addEventListener('change', function () {
+            if(this.files && this.files[0]) {
+                fileChosen.innerHTML = `<i class="fa-solid fa-file-image me-2"></i> ${this.files[0].name}`;
+                fileChosen.style.display = 'inline-block';
+                submitBtn.disabled = false;
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    // Hide camera if open
+                    document.getElementById('camera-container').style.display = 'none';
+                    if(stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Drag and drop styles
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.style.borderColor = 'var(--accent)';
+                dropZone.style.background = 'rgba(16, 185, 129, 0.1)';
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.style.borderColor = '';
+                dropZone.style.background = '';
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+            actualBtn.files = files;
+            actualBtn.dispatchEvent(new Event('change'));
+        }, false);
+
+        // Camera Logic
+        let stream = null;
+        let capturedFile = null;
+
+        document.getElementById('camera-btn').addEventListener('click', async function () {
+            const container = document.getElementById('camera-container');
+            const videoFeed = document.getElementById('camera-feed');
+            
+            // Hide preview if active
+            previewContainer.style.display = 'none';
+            
+            if(container.style.display === 'block') {
+                container.style.display = 'none';
+                if(stream) stream.getTracks().forEach(track => track.stop());
+                return;
+            }
+
+            container.style.display = 'block';
+            
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                videoFeed.srcObject = stream;
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                alert('Unable to access camera. Please check permissions.');
+                container.style.display = 'none';
+            }
+        });
+
+        document.getElementById('capture-btn').addEventListener('click', function () {
+            const video = document.getElementById('camera-feed');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL('image/jpeg');
+            
+            // Convert to file
+            const byteString = atob(dataUrl.split(',')[1]);
+            const arrayBuffer = new ArrayBuffer(byteString.length);
+            const uintArray = new Uint8Array(arrayBuffer);
+            for (let i = 0; i < byteString.length; i++) {
+                uintArray[i] = byteString.charCodeAt(i);
+            }
+            const blob = new Blob([uintArray], { type: 'image/jpeg' });
+            capturedFile = new File([blob], "camera_capture.jpg", { type: 'image/jpeg' });
+
+            // Assign to main input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(capturedFile);
+            actualBtn.files = dataTransfer.files;
+
+            // Stop camera
+            if(stream) stream.getTracks().forEach(track => track.stop());
+            document.getElementById('camera-container').style.display = 'none';
+
+            // Show preview
+            previewImg.src = dataUrl;
+            previewContainer.style.display = 'block';
+            fileChosen.innerHTML = `<i class="fa-solid fa-camera me-2"></i> Captured Image`;
+            fileChosen.style.display = 'inline-block';
+            submitBtn.disabled = false;
+        });
+    });
+</script>
+{% endblock body %}

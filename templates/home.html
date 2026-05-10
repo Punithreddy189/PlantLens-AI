@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}PlantLens AI - Home{% endblock pagetitle %}
+
+{% block body %}
+<style>
+    /* Hero Section Parallax */
+    .hero-section {
+        position: relative;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+        margin-top: -80px; /* Offset navbar */
+        padding-top: 80px;
+    }
+    
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 120%;
+        background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        z-index: -2;
+        filter: brightness(0.3);
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, transparent, var(--bg-primary));
+        z-index: -1;
+    }
+
+    .hero-content h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 2rem;
+    }
+
+    /* Crop Grid */
+    .crop-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        padding: 4rem 0;
+    }
+
+    .crop-card {
+        padding: 1.5rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .crop-img-container {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid var(--border-glass);
+        transition: transform 0.3s ease;
+    }
+
+    .crop-card:hover .crop-img-container {
+        transform: scale(1.1);
+        border-color: var(--accent);
+    }
+
+    .crop-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .crop-name {
+        font-weight: 500;
+        font-size: 1.1rem;
+        color: var(--text-main);
+        margin: 0;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <h1 class="gs-hero text-gradient">Plant Disease Detection</h1>
+        <p class="gs-hero">Leverage cutting-edge Edge AI to identify crop diseases instantly. Upload an image of a plant leaf, and our Deep Learning model will diagnose the health status.</p>
+        <div class="gs-hero mt-4">
+            <a href="/index" class="btn-glow me-3"><i class="fa-solid fa-microchip me-2"></i> Scan</a>
+<!-- Health Benefits Section -->
+<section id="health-benefits" class="container py-5">
+    <div class="text-center mb-5 gs-reveal-up">
+        <h2 class="display-5 fw-bold text-gradient d-inline-block mb-3 mt-5">Flora Health Benefits</h2>
+        <p class="text-light fs-5 mx-auto" style="max-width: 700px;">Discover the incredible nutritional value, medicinal properties, and environmental benefits of the plants and vegetables supported by our AI engine.</p>
+    </div>
+
+    <!-- Apple -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-1">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/apple_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Apple Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Apple';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-2">
+            <h3 class="text-gradient display-6 fw-bold mb-3"><i class="fa-solid fa-apple-whole me-3 text-success"></i>Apple</h3>
+            <h5 class="text-white mb-4">"An apple a day keeps the doctor away"</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify;">Apples are exceptionally healthy fruits with extensive research-backed benefits. They are rich in soluble fiber, essential vitamins, and powerful antioxidants. These critical nutrients help neutralize free radicals, protecting your cellular structure from oxidative stress and significantly lowering the risk of chronic conditions such as heart disease, hypertension, and type 2 diabetes.</p>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Vitamin C</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Potassium</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>High Fiber</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tomato -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/tomato_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Tomato Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Tomato';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-1 text-lg-end">
+            <h3 class="text-gradient display-6 fw-bold mb-3">Tomato <i class="fa-solid fa-leaf ms-3 text-success"></i></h3>
+            <h5 class="text-white mb-4">The Lycopene Powerhouse</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify; text-align-last: right;">Tomatoes are the major dietary source of the antioxidant lycopene, which has been robustly linked to many health benefits, including a dramatically reduced risk of cardiovascular disease and certain forms of cancer. They are also a formidable source of vitamin C, potassium, folate, and vitamin K, promoting glowing skin health and maintaining stable blood pressure.</p>
+            <div class="d-flex flex-wrap gap-3 justify-content-lg-end mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Lycopene</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Folate</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Vitamin K</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Corn -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-1">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/corn_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Corn Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Corn';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-2">
+            <h3 class="text-gradient display-6 fw-bold mb-3"><i class="fa-solid fa-seedling me-3 text-success"></i>Corn</h3>
+            <h5 class="text-white mb-4">Energy & Visual Health</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify;">Corn is exceptionally rich in vitamin C, an antioxidant that helps protect your cells from long-term damage and wards off devastating diseases. Yellow corn is particularly famous for being an excellent source of the carotenoids lutein and zeaxanthin, which are scientifically proven to be crucial for eye health and help prevent macular degeneration and lens damage.</p>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Lutein</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Complex Carbs</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Vitamin B5</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Potato -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/potato_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Potato Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Potato';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-1 text-lg-end">
+            <h3 class="text-gradient display-6 fw-bold mb-3">Potato <i class="fa-solid fa-carrot ms-3 text-success"></i></h3>
+            <h5 class="text-white mb-4">Nature's Comfort Food</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify; text-align-last: right;">Potatoes are densely packed with vitamins and essential minerals, though the specific variety and preparation method dictate their ultimate nutritional value. They contain a highly special type of starch called resistant starch, which has been strongly linked to profound improvements in insulin resistance and the flourishing of beneficial gut bacteria for supreme digestive health.</p>
+            <div class="d-flex flex-wrap gap-3 justify-content-lg-end mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Resistant Starch</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Vitamin B6</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Potassium</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strawberry -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-1">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/strawberry_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Strawberry Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Strawberry';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-2">
+            <h3 class="text-gradient display-6 fw-bold mb-3"><i class="fa-brands fa-raspberry-pi me-3 text-success"></i>Strawberry</h3>
+            <h5 class="text-white mb-4">The Antioxidant Heart Guardian</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify;">Strawberries are incredibly rich in antioxidants and plant compounds, which have powerful benefits for heart health and blood sugar control. They are an excellent source of vitamin C, manganese, folate, and potassium. Their high levels of anthocyanins give them their vibrant red color and have been shown to drastically reduce oxidative stress and inflammation.</p>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Anthocyanins</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Vitamin C</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Manganese</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grape -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/grape_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Grape Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Grape';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-1 text-lg-end">
+            <h3 class="text-gradient display-6 fw-bold mb-3">Grape <i class="fa-solid fa-wine-glass ms-3 text-success"></i></h3>
+            <h5 class="text-white mb-4">The Resveratrol Superfruit</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify; text-align-last: right;">Grapes are famous for containing resveratrol, a potent compound that has been extensively studied for its potential to extend lifespan and act as a powerful antioxidant. They promote excellent heart health by reducing blood pressure and preventing cellular damage. They are also highly hydrating and support pristine brain function and longevity.</p>
+            <div class="d-flex flex-wrap gap-3 justify-content-lg-end mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Resveratrol</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Polyphenols</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Hydration</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Peach -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-1">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/peach_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Peach Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Peach';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-2">
+            <h3 class="text-gradient display-6 fw-bold mb-3"><i class="fa-solid fa-leaf me-3 text-success"></i>Peach</h3>
+            <h5 class="text-white mb-4">Immune & Skin Enhancer</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify;">Peaches are highly nutrient-dense fruits that promote healthy digestion, deeply nourish the skin, and boost immune resilience. The skin of the peach is especially rich in antioxidants that protect against rapid aging and illness. They also contain compounds that may help reduce allergy symptoms by preventing the release of histamines.</p>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Vitamin A</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Dietary Fiber</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Anti-allergy</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blueberry -->
+    <div class="row align-items-center mb-5 pb-5 gs-reveal-row">
+        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2">
+            <div class="glass-card p-2 rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="height: 400px;">
+                <img src="{{ url_for('static', filename='images/blueberry_leaf.png') }}" class="w-100 h-100 object-fit-cover rounded-3 benefit-img" alt="Blueberry Leaf" onerror="this.src='https://dummyimage.com/800x600/2e8b57/ffffff.png&text=Blueberry';">
+            </div>
+        </div>
+        <div class="col-lg-7 px-lg-5 order-lg-1 text-lg-end">
+            <h3 class="text-gradient display-6 fw-bold mb-3">Blueberry <i class="fa-solid fa-droplet ms-3 text-success"></i></h3>
+            <h5 class="text-white mb-4">The King of Antioxidants</h5>
+            <p class="text-light mb-4 fs-5 lh-lg" style="text-align: justify; text-align-last: right;">Blueberries are widely considered the undisputed kings of antioxidant foods. They are loaded with flavonoids that directly increase antioxidant levels inside the body. Consistent consumption has been strongly linked to delayed brain aging, improved memory, accelerated muscle recovery, and robust protection against devastating DNA damage.</p>
+            <div class="d-flex flex-wrap gap-3 justify-content-lg-end mt-4">
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Flavonoids</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Neuro-protection</span>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-4 py-2 fs-6 rounded-pill"><i class="fa-solid fa-plus me-2"></i>Vitamin K1</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Additional Scripts for Page-Specific Animations -->
+<script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+        // Hero Content Animation
+        gsap.from(".gs-hero", {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.5
+        });
+
+        // Parallax Effect for Hero Background
+        gsap.to("#hero-bg", {
+            yPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".hero-section",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // Reveal animations for sections
+        gsap.utils.toArray('.gs-reveal-up').forEach(elem => {
+            gsap.from(elem, {
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 80%"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Health Benefits Row Animations
+        gsap.utils.toArray('.gs-reveal-row').forEach(row => {
+            // Image animation
+            gsap.from(row.querySelector('.glass-card'), {
+                scrollTrigger: {
+                    trigger: row,
+                    start: "top 75%",
+                    toggleActions: "play none none none"
+                },
+                x: row.querySelector('.order-lg-1') ? -100 : 100,
+                opacity: 0,
+                duration: 1.2,
+                ease: "power4.out"
+            });
+            
+            // Image subtle parallax scale
+            gsap.to(row.querySelector('.benefit-img'), {
+                scrollTrigger: {
+                    trigger: row,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 1
+                },
+                scale: 1.15,
+                ease: "none"
+            });
+
+            // Text animation
+            gsap.from(row.querySelector('.col-lg-7').children, {
+                scrollTrigger: {
+                    trigger: row,
+                    start: "top 75%",
+                    toggleActions: "play none none none"
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: "back.out(1.2)"
+            });
+        });
+    });
+</script>
+{% endblock body %}

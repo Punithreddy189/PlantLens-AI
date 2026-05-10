@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}PlantLens AI - {{title}}{% endblock pagetitle %}
+
+{% block body %}
+<style>
+    .dashboard-container {
+        padding-top: 6rem;
+        padding-bottom: 4rem;
+        min-height: calc(100vh - 160px);
+    }
+    
+    .result-hero {
+        position: relative;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border-glass);
+    }
+
+    .result-hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{image_url}}');
+        background-size: cover;
+        background-position: center;
+        filter: blur(20px) brightness(0.3);
+        z-index: 1;
+    }
+
+    .result-hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 3rem;
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+    }
+
+    .result-image {
+        width: 250px;
+        height: 250px;
+        border-radius: 1rem;
+        object-fit: cover;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        border: 2px solid var(--border-glass);
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        background: var(--bg-glass-light);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-glass);
+    }
+
+    .status-healthy { color: var(--accent); border-color: var(--accent-glow); box-shadow: 0 0 15px var(--accent-glow); }
+    .status-diseased { color: #ef4444; border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+
+    .data-card {
+        height: auto;
+    }
+
+    .data-card h4 {
+        color: var(--accent);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .supplement-img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        background: white;
+        padding: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .result-hero-content {
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="container">
+        
+        <!-- Header / Banner Section -->
+        <div class="result-hero gs-reveal-up">
+            <div class="result-hero-bg"></div>
+            <div class="result-hero-content">
+                <img src="{{image_url}}" alt="Crop Image" class="result-image">
+                
+                <div>
+                    {% set is_healthy = (pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or pred==24 or pred==25 or pred==28 or pred==38) %}
+                    
+                    {% if is_healthy %}
+                        <div class="status-badge status-healthy"><i class="fa-solid fa-shield-check"></i> Healthy Crop Detected</div>
+                    {% else %}
+                        <div class="status-badge status-diseased"><i class="fa-solid fa-triangle-exclamation"></i> Attention Required</div>
+                    {% endif %}
+                    
+                    <h1 class="display-4 fw-bold text-white mb-2">{{title}}</h1>
+                    <p class="text-light fs-5 mb-0">Analysis complete. Confidence level: <span class="text-accent fw-bold">98.5%</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Column: Description & Prevention -->
+            <div class="col-lg-8">
+                
+                <!-- Description Card -->
+                <div class="glass-panel data-card p-4 gs-reveal-left mb-4">
+                    <h4>
+                        <i class="fa-solid fa-circle-info"></i>
+                        {% if is_healthy %} Tips to Grow Healthy Plants {% else %} Detailed Diagnosis {% endif %}
+                    </h4>
+                    <p class="text-light lh-lg mb-0" style="white-space: pre-line;">{{desc}}</p>
+                </div>
+
+                <!-- Prevention / Benefits Card -->
+                <div class="glass-panel data-card p-4 gs-reveal-left">
+                    <h4>
+                        <i class="fa-solid fa-leaf"></i>
+                        {% if is_healthy %} Benefits {% else %} Recommended Treatment Plan {% endif %}
+                    </h4>
+                    <div class="text-light lh-lg" style="white-space: pre-line;">
+                        {{prevent}}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Supplements -->
+            <div class="col-lg-4">
+                {% if pred != 4 %}
+                <div class="glass-panel data-card p-4 text-center gs-reveal-right">
+                    <h4 class="justify-content-center mb-4">
+                        <i class="fa-solid fa-flask"></i>
+                        {% if is_healthy %} Recommended Fertilizer {% else %} Prescribed Supplement {% endif %}
+                    </h4>
+                    
+                    <img src="{{simage}}" alt="{{sname}}" class="supplement-img" onerror="this.src='https://dummyimage.com/200x250/2e8b57/ffffff.png&text=Supplement';">
+                    
+                    <h5 class="text-white mb-4">{{sname}}</h5>
+                    
+                    <a target="_blank" href="{{buy_link}}" class="btn-glow w-100">
+                        <i class="fa-solid fa-cart-shopping me-2"></i> Acquire Product
+                    </a>
+                </div>
+                {% else %}
+                <div class="glass-panel data-card p-4 text-center d-flex flex-column justify-content-center gs-reveal-right">
+                    <i class="fa-solid fa-leaf text-light" style="font-size: 4rem; opacity: 0.2; margin-bottom: 1rem;"></i>
+                    <p class="text-light mb-0">No specific supplements recommended for this classification.</p>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- Back Button -->
+        <div class="text-center mt-5 gs-reveal-up">
+            <a href="/index" class="btn-outline-glow">
+                <i class="fa-solid fa-rotate-left me-2"></i> Process Another Sample
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        gsap.from(".gs-reveal-up", { y: 30, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 });
+        gsap.from(".gs-reveal-left", { x: -30, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.2, delay: 0.2 });
+        gsap.from(".gs-reveal-right", { x: 30, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.4 });
+    });
+</script>
+{% endblock body %}
