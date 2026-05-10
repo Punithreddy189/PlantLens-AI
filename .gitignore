@@ -1,7 +1,4 @@
-# Model weights (too large for GitHub - 200MB+)
-plant_disease_model_1_latest.pt
-*.pt
-*.pth
+# Model weights — tracked via Git LFS
 
 # Python cache
 __pycache__/
