@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}PlantLens AI - Login{% endblock pagetitle %}
+
+{% block body %}
+<style>
+    .auth-section {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 0;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 450px;
+        padding: 3rem;
+    }
+
+    .form-control-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-glass);
+        color: white;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-glass:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent);
+        box-shadow: 0 0 15px var(--accent-glow);
+        color: white;
+    }
+
+    .auth-footer {
+        margin-top: 2rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+
+    .auth-footer a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-card glass-panel mx-auto gs-reveal-up">
+            <h2 class="text-gradient fw-bold mb-4 text-center">Welcome Back</h2>
+            <p class="text-muted text-center mb-5">Login to access your Digital Garden and scan history.</p>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-info border-0 glass-panel mb-4 py-2 text-center" style="font-size: 0.9rem;">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form action="/login" method="POST">
+                <div class="mb-4">
+                    <label class="form-label text-light small fw-bold">USERNAME</label>
+                    <input type="text" name="username" class="form-control form-control-glass" placeholder="Enter your username" required>
+                </div>
+                <div class="mb-5">
+                    <label class="form-label text-light small fw-bold">PASSWORD</label>
+                    <input type="password" name="password" class="form-control form-control-glass" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-glow w-100 py-3">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account? <a href="/register">Create one</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        gsap.from(".gs-reveal-up", { y: 30, opacity: 0, duration: 0.8, ease: "power3.out" });
+    });
+</script>
+{% endblock body %}

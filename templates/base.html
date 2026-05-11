@@ -31,7 +31,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
                     </li>
@@ -42,8 +42,23 @@
                         <a class="nav-link" href="/market">Supplements</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact Us</a>
+                        <a class="nav-link" href="/garden">My Garden</a>
                     </li>
+                    
+                    {% if session.get('user_id') %}
+                    <li class="nav-item ms-lg-3 dropdown">
+                        <a class="nav-link dropdown-toggle btn-outline-glow px-3 py-1" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-user-circle me-1"></i> {{ session.get('username') }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end glass-panel mt-2" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item text-light" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item ms-lg-3">
+                        <a class="nav-link btn-glow px-4 py-1" href="/login">Login</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -66,11 +81,34 @@
             <ul class="list-inline mb-4">
                 <li class="list-inline-item mx-3"><a href="/" class="text-decoration-none text-muted">Home</a></li>
                 <li class="list-inline-item mx-3"><a href="/index" class="text-decoration-none text-muted">AI Engine</a></li>
-                <li class="list-inline-item mx-3"><a href="#" class="text-decoration-none text-muted">About</a></li>
+                <li class="list-inline-item mx-3"><a href="/garden" class="text-decoration-none text-muted">My Garden</a></li>
+                <li class="list-inline-item mx-3"><a href="/contact" class="text-decoration-none text-muted">Contact</a></li>
             </ul>
             <p class="text-muted small mb-0">Powered by advanced Deep Learning. Created by PlantLens Team.</p>
         </div>
     </footer>
+    <!-- AI Chatbot -->
+    <button class="chatbot-toggler">
+        <span class="fa-solid fa-message"></span>
+        <span class="fa-solid fa-xmark"></span>
+    </button>
+    <div class="chatbot">
+        <header>
+            <h2>PlantLens Assistant</h2>
+        </header>
+        <ul class="chatbox">
+            <li class="chat incoming">
+                <span class="fa-solid fa-robot"></span>
+                <p>Hi there! ?? I'm your PlantLens assistant. How can I help you with your plants today?</p>
+            </li>
+        </ul>
+        <div class="chat-input">
+            <textarea placeholder="Ask me anything..." spellcheck="false" required></textarea>
+            <span id="send-btn" class="fa-solid fa-paper-plane"></span>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

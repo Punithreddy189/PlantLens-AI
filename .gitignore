@@ -17,3 +17,7 @@ env/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Database and Scratch
+*.db
+scratch/

@@ -73,6 +73,17 @@
             <div class="col-lg-8 mx-auto">
                 <h1 class="display-4 fw-bold text-gradient mb-3">Initialize AI Engine</h1>
                 <p class="text-light fs-5">Upload an image of a diseased leaf or use your camera to diagnose the issue instantly.</p>
+                
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissible fade show glass-panel border-danger border-opacity-50 text-white mt-4" role="alert">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
             </div>
         </div>
 
